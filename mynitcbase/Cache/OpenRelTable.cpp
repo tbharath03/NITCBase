@@ -376,9 +376,42 @@ int OpenRelTable::closeRel(int relId) {
   	relCatBlock.setRecord(relCatRecord,recId.slot);
   	*/
   }
-  OpenRelTable::tableMetaInfo[relId].free=true;
+  
   RelCacheTable::relCache[relId]=nullptr;
-  AttrCacheTable::attrCache[relId]=nullptr;
+
+  /****** Releasing the Attribute Cache entry of the relation ******/
+
+    // for all the entries in the linked list of the relIdth Attribute Cache entry.
+    AttrCacheEntry *entry=AttrCacheTable::attrCache[relId];
+    while(entry!=nullptr)
+    {
+        if(entry->dirty)
+        {
+            /* Get the Attribute Catalog entry from attrCache
+             Then convert it to a record using AttrCacheTable::attrCatEntryToRecord().
+             Write back that entry by instantiating RecBuffer class. Use recId
+             member field and recBuffer.setRecord() */
+            AttrCatEntry attrCatEntry;
+            AttrCacheTable::getAttrCatEntry(relId,entry->attrCatEntry.attrName,&attrCatEntry);
+            
+            Attribute record[ATTRCAT_NO_ATTRS];
+            AttrCacheTable::attrCatEntryToRecord(&attrCatEntry,record);
+            RecBuffer block(entry->recId.block);
+            block.setRecord(record,entry->recId.slot);
+        }
+
+        // free the memory dynamically alloted to this entry in Attribute
+        // Cache linked list and assign nullptr to that entry
+        AttrCacheEntry *en=entry;
+        entry=entry->next;
+        en=nullptr;
+    }
+
+    /****** Updating metadata in the Open Relation Table of the relation  ******/
+
+    //free the relIdth entry of the tableMetaInfo.
+    OpenRelTable::tableMetaInfo[relId].free=true;
+
 
   return SUCCESS;
 }

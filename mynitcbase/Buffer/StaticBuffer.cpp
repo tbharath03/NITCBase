@@ -1,5 +1,5 @@
 #include "StaticBuffer.h"
-
+#include<stdio.h>
 unsigned char StaticBuffer::blocks[BUFFER_CAPACITY][BLOCK_SIZE];
 struct BufferMetaInfo StaticBuffer::metainfo[BUFFER_CAPACITY];
 unsigned char StaticBuffer::blockAllocMap[DISK_BLOCKS];
@@ -26,6 +26,15 @@ At this stage, we are not writing back from the buffer to the disk since we are
 not modifying the buffer. So, we will define an empty destructor for now. In
 subsequent stages, we will implement the write-back functionality here.
 */
+//*WE CAN PRINT BUFFER BLOCK
+void printBuffer (int x, unsigned char block[]) {
+    for (int i = 0; i < BLOCK_SIZE; i++){
+        if (i % 32 == 0) printf ("\n");
+        printf ("%u ", block[i]);    
+    }
+    printf ("\n");
+}
+
 StaticBuffer::~StaticBuffer() {
 
 	for(int i=0;i<4;i++){
@@ -162,5 +171,6 @@ int StaticBuffer::getStaticBlockType(int blockNum){
 
     // Access the entry in block allocation map corresponding to the blockNum argument
     // and return the block type after type casting to integer.
-    return (int)blockAllocMap[blockNum];
+    int ret=(int)blockAllocMap[blockNum];
+    return ret;
 }
