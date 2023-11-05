@@ -131,9 +131,7 @@ RecId BPlusTree::bPlusSearch(int relId, char attrName[ATTR_SIZE], Attribute attr
             {
                 internalBlk.getEntry(&intEntry, ind);
                 int cmpVal = compareAttrs(intEntry.attrVal, attrVal, attrCatEntry.attrType);
-                if (/* such an entry is found*/ (op == EQ && cmpVal == 0) ||
-                    (op == GT && cmpVal > 0) ||
-                    (op == GE && cmpVal >= 0))
+                if (/* such an entry is found*/ ((op==EQ || op==GE) && cmpVal>=0) || (op==GT && cmpVal>0))
                 {
                     // move to the left child of that entry
 
@@ -150,7 +148,7 @@ RecId BPlusTree::bPlusSearch(int relId, char attrName[ATTR_SIZE], Attribute attr
             {
                 block = intEntry.rChild;
             }
-            index = ind;
+            //index = 0;
         }
     }
 
@@ -158,7 +156,7 @@ RecId BPlusTree::bPlusSearch(int relId, char attrName[ATTR_SIZE], Attribute attr
 
     /******  Identify the first leaf index entry from the current position
                 that satisfies our condition (moving right)             ******/
-    index=0;
+    //! index=0;
     while (block != -1)
     {
         // load the block into leafBlk using IndLeaf::IndLeaf().

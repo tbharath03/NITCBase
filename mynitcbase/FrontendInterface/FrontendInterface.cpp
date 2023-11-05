@@ -446,7 +446,7 @@ int RegexHandler::selectAttrFromJoinHandler() {
                                                       joinAttributeOne, joinAttributeTwo, attrCount,
                                                       attrNames);
   if (ret == SUCCESS) {
-    cout << "Selected successfully into " << targetRelName;
+    cout << "Selected successfully into " << targetRelName<<endl;
   }
 
   return ret;
