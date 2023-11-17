@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 #include <cstring>
-
+extern int cnt;
 
 // the declarations for these functions can be found in "BlockBuffer.h"
 
@@ -599,7 +599,7 @@ int IndLeaf::setEntry(void *ptr, int indexNum) {
 }
 
 int compareAttrs(union Attribute attr1, union Attribute attr2, int attrType) {
-
+    cnt++;
     double diff;
     if(attrType==STRING){
     	diff=strcmp(attr1.sVal,attr2.sVal);

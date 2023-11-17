@@ -2,7 +2,7 @@
 
 #include <cstring>
 #include <bits/stdc++.h>
-
+int cnt;
 // will return if a string can be parsed as a floating point number
 bool isNumber(char *str) {
   int len;
@@ -113,7 +113,7 @@ int Algebra::select(char srcRel[ATTR_SIZE], char targetRel[ATTR_SIZE], char attr
 
     // read every record that satisfies the condition by repeatedly calling
     // BlockAccess::search() until there are no more records to be read
-    
+    cnt=0;
     while (/* BlockAccess::search() returns success */BlockAccess::search(srcRelId,record,attr,attrVal,op)==SUCCESS) {
 
         // ret = BlockAccess::insert(targetRelId, record);
@@ -135,6 +135,7 @@ int Algebra::select(char srcRel[ATTR_SIZE], char targetRel[ATTR_SIZE], char attr
     // Close the targetRel by calling closeRel() method of schema layer
 	Schema::closeRel(targetRel);
     // return SUCCESS.
+    std::cout<<cnt<<std::endl;
     return SUCCESS;
 }
 
